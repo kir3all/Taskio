@@ -115,14 +115,14 @@ async def process_show_command(message, state: FSMContext):
     cur_list = None
     async with state.proxy() as data:
         cur_list = data['lists'][data['current_list']]
-        keys = [x for x in cur_list.keys() if not isinstance(x, int)]
-        st = ''
-        for index in sorted(keys): 
-            if index != '':
-                st = cur_list[index] + '\n'
-            else:
-                await message.reply(message.chat.id, "There is an empty list")
-    await bot.send_message(message.chat.id, st)
+#         keys = [x for x in cur_list.keys() if not isinstance(x, int)]
+#         st = ''
+#         for index in sorted(keys): 
+#             if index != '':
+#                 st = cur_list[index] + '\n'
+#             else:
+#                 await message.reply(message.chat.id, "There is an empty list")
+    await bot.send_message(message.chat.id, cur_list)
 
 @dp.message_handler(commands=['show'], state=Form.menu)
 async def process_show_all_command(message, state: FSMContext):
@@ -185,7 +185,7 @@ async def selectt(message, state: FSMContext):
         
 passbtn = InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text = "Pass ✅", callback_data = 'pass'))
 
-@dp.callback_query_handler(text='pass')
+@dp.callback_query_handler(text='pass', state=Form.list)
 async def operpass_call(callback: types.CallbackQuery):
     await callback.message.answer("Well Done! Keep it up, buddy! Send '/show' command to exit the task window")
     await callback.answer()
